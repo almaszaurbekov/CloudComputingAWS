@@ -1,0 +1,9 @@
+# Cloud Computing
+![enter image description here](https://lh3.googleusercontent.com/GQthYqgO-f9Oj3fZjJx1u8wYhePZ_2TdAQKewK2HXVcciggflsZWBvnOh38gAWr5nTwV3mT91SWDaJBFOxJQPtpRVxs_I9Fs6p-ja50pjVWIer4tgPuoNrM0SJqdd96x4Uj-soy3OzNhcXsjVovYV4kmADATtcyE6f9xVqiv615ZkLtKzz_mLoTuaR2LdNk1PuOwa8uymJAv9-MrfJPtThnZfhR5SUAIb6Yb_vCplo4Bs9_4DtrV9jVJlTWDhgYbv6GR_Ck8L_7F_hYCzY24Of9dzA54NVybTg6Q_s5s1NB4CK39k6ijQJIVHSQ0f-3geb-_3Jcaa8QuludZiXrLaIg7L_crjeUqBjI9jUYgMqIBMmUOqUMU4f-stO3MFs45YWTbq0Y3McscUbeAlb65OxAEwudPP4a4m8QYgPJpvWezQZxHy-u36XhTojBPhwT_kZNUuPUDIUFeKwm-Y29AlV09W9R42XB08AlgF_K_BUhVWIgc9N-IvzTvzWxczkGCU_fBxcVmu7Lre5D_ToiD2eGnVEc6ZOFCs-H0ZGybKHb1urXI3_Y3yP76O8bIrOwXJU3XCvFWjtrT_9nR8jBOllwszOyTncDug0CfC2UM8uHkUqwFM3ekXosmz_30oBX9C-hDQNRBKwJvWGHQlbvrpbXdQV3cyQxhajlKRoO7HNp9JBdjl2XKyLuLKm_N=w1168-h657-no)
+
+Разработка веб-приложения для взаимодействия с тестовыми данными. Пользователь обращается к главному контейнеру, и в зависимости от того, какие данные ему нужны мы обращаемся к одному из двух существующих API-сервисам. Данные находятся в базе данных **MongoDd**(N1 и N1) и **Microsoft SQL Server**(S1 и S2). Back-End разработка на ASP.NET Core WEB API.
+
+1. Пользователь может аутентифицироваться и регистрироваться
+2. Создавать новые посты
+3. Совершать новые покупки
+4. Добавлять в корзину выбранные продукты

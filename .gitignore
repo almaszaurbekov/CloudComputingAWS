@@ -1,0 +1,14 @@
+
+# ASP.NET
+Common
+Properties
+bin
+obj
+appsettings.json
+appsettings.Development.json
+
+# Visual Studio
+.vs
+
+# Amazon Web Services
+aws-beanstalk-tools-defaults.json
