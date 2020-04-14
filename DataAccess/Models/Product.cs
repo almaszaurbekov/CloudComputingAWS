@@ -7,5 +7,7 @@ namespace DataAccess.Models
 {
     public class Product : Model
     {
+        public string Name { get; set; }
+        public double Price { get; set; }
     }
 }

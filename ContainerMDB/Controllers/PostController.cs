@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using DataAccess.Models;
-using DataAccess.Static;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-namespace ContainerRDS.Controllers
+namespace ContainerMDB.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -19,7 +18,7 @@ namespace ContainerRDS.Controllers
         [HttpGet]
         public List<Post> Get()
         {
-            return SDController.GetPosts(10);
+            return new List<Post>();
         }
     }
 }
