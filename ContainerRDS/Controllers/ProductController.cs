@@ -19,7 +19,7 @@ namespace ContainerRDS.Controllers
         [HttpGet]
         public List<Product> Get()
         {
-            return SDController.GetProducts(10);
+            return new List<Product>();
         }
     }
 }

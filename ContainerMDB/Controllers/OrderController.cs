@@ -3,7 +3,7 @@ using DataAccess.Models;
 using DataAccess.Static;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-namespace ContainerRDS.Controllers
+namespace ContainerMDB.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -19,7 +19,7 @@ namespace ContainerRDS.Controllers
         [HttpGet]
         public List<Order> Get()
         {
-            return SDController.GetOrders(10);
+            return new List<Order>();
         }
     }
 }

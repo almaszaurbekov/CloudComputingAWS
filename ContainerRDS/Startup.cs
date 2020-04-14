@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
+using DataAccess.Services;
+using DataAccess.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ContainerRDS
 {
@@ -25,6 +23,27 @@ namespace ContainerRDS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // DbContext Configurations
+            services.AddDbContext<RdsContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("RdsConnection")));
+
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<RdsContext>()
+            .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Identity.Cookie";
+                //options.LoginPath = "/Account/Login";
+                //options.AccessDeniedPath = "/Home/Error";
+            });
+
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IProductService, ProductService>();
+
             services.AddControllers();
         }
 
@@ -40,6 +59,7 @@ namespace ContainerRDS
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
