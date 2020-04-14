@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +28,20 @@ namespace MainContainer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpClient("RDS", client =>
+            {
+                client.BaseAddress = new Uri(ApiDestinations.CONTAINER_RDS);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("User-Agent", "HttpCleintFactoryRDS");
+            });
+            services.AddHttpClient("MDB", client =>
+            {
+                client.BaseAddress = new Uri(ApiDestinations.CONTAINER_MDB);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("User-Agent", "HttpCleintFactoryMDB");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

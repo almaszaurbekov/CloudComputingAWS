@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using DataAccess.JsonModels;
+using DataAccess.Models;
 using DataAccess.Services;
 using DataAccess.Static;
 using Microsoft.AspNetCore.Mvc;
@@ -12,21 +15,24 @@ namespace ContainerRDS.Controllers
     {
         private readonly ILogger<UserController> logger;
         private readonly IUserService service;
+        private readonly IMapper mapper;
 
-        public UserController(ILogger<UserController> logger, IUserService service)
+        public UserController(ILogger<UserController> logger, 
+            IUserService service, IMapper mapper)
         {
             this.logger = logger;
             this.service = service;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<OkObjectResult> GetUserList()
         {
             var users = await service.GetAll();
-            return Ok(users);
+            return Ok(mapper.Map<List<User>, List<UserJsonModel>>(users));
         }
 
-        [HttpGet("email")]
+        [HttpGet("{email}")]
         public async Task<OkObjectResult> GetUserByEmail(string email)
         {
             if (SDHelper.IsValueNotNull(email))
@@ -34,7 +40,7 @@ namespace ContainerRDS.Controllers
                 var user = await service
                     .Find(s => s.NormalizedEmail.Contains(email.ToUpper()));
                 if(user != null)
-                    return Ok(new UserJsonModel() { Id = user.Id, Email = user.Email, IsSuccess = true });
+                    return Ok(mapper.Map<User, UserJsonModel>(user));
                 return Ok(new UserJsonModel() { Error = "There is no user with this email", IsSuccess = false });
             }
             return Ok(new UserJsonModel("Email field is empty", false));

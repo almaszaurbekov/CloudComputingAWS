@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Services;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
+using ContainerRDS.Mappings;
 
 namespace ContainerRDS
 {
@@ -43,6 +45,15 @@ namespace ContainerRDS
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
+
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddControllers();
         }
