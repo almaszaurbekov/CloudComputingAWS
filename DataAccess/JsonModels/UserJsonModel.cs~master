@@ -1,5 +1,5 @@
-﻿using ContainerRDS.JsonModels.Base;
-namespace ContainerRDS.JsonModels
+﻿using DataAccess.JsonModels.Base;
+namespace DataAccess.JsonModels
 {
     public class UserJsonModel : BaseJsonModel
     {
