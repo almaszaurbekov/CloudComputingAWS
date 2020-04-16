@@ -32,7 +32,7 @@ namespace ContainerRDS.Controllers
             return Ok(mapper.Map<List<User>, List<UserJsonModel>>(users));
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("email/{email}")]
         public async Task<OkObjectResult> GetUserByEmail(string email)
         {
             if (SDHelper.IsValueNotNull(email))
@@ -40,6 +40,19 @@ namespace ContainerRDS.Controllers
                 var user = await service
                     .Find(s => s.NormalizedEmail.Contains(email.ToUpper()));
                 if(user != null)
+                    return Ok(mapper.Map<User, UserJsonModel>(user));
+                return Ok(new UserJsonModel() { Error = "There is no user with this email", IsSuccess = false });
+            }
+            return Ok(new UserJsonModel("Email field is empty", false));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<OkObjectResult> GetUserById(string id)
+        {
+            if (SDHelper.IsValueNotNull(id))
+            {
+                var user = await service.Find(s => s.Id == id);
+                if (user != null)
                     return Ok(mapper.Map<User, UserJsonModel>(user));
                 return Ok(new UserJsonModel() { Error = "There is no user with this email", IsSuccess = false });
             }
