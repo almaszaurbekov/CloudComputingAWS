@@ -29,7 +29,12 @@ namespace ContainerRDS.Controllers
         public async Task<OkObjectResult> GetUserList()
         {
             var users = await service.GetAll();
-            return Ok(mapper.Map<List<User>, List<UserJsonModel>>(users));
+            if(users.Count > 0)
+            {
+                var model = new UserListJsonModel(users);
+                return Ok(model);
+            }
+            return Ok(new UserListJsonModel(false, "User list is empty"));
         }
 
         [HttpGet("email/{email}")]
