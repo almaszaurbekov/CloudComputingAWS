@@ -1,14 +1,14 @@
 ﻿using DataAccess.JsonModels.Base;
 namespace DataAccess.JsonModels
 {
-    public class UserJsonModel : BaseJsonModel
+    public class RegisterJsonModel : BaseJsonModel
     {
-        public string Id { get; set; }
         public string Email { get; set; }
+        public string Result { get; set; }
 
-        public UserJsonModel() { }
+        public RegisterJsonModel() { }
 
-        public UserJsonModel(string error, bool isSuccess)
+        public RegisterJsonModel(string error, bool isSuccess)
         {
             Error = error;
             IsSuccess = isSuccess;

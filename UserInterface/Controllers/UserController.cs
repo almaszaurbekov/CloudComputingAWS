@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoMapper;
 using Common;
 using DataAccess.JsonModels;
 using DataAccess.Models;
@@ -16,10 +17,13 @@ namespace UserInterface.Controllers
     public class UserController : Controller
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly IMapper mapper;
 
-        public UserController(IHttpClientFactory httpClientFactory)
+        public UserController(IHttpClientFactory httpClientFactory,
+            IMapper mapper)
         {
             this.httpClientFactory = httpClientFactory;
+            this.mapper = mapper;
         }
 
         [HttpGet]
