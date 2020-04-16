@@ -54,20 +54,5 @@ namespace MainContainer.Controllers
             var result = await response.Content.ReadAsStringAsync();
             return Ok(result);
         }
-
-        [HttpPost("account/login")]
-        public async Task<OkObjectResult> Login(string email, string password)
-        {
-            var client = httpClientFactory.CreateClient("RDS");
-            var parameters = new Dictionary<string, string>()
-            {
-                { "email", email },
-                { "password", password }
-            };
-            var response = await client.PostAsync("account/login", 
-                new FormUrlEncodedContent(parameters)).ConfigureAwait(false);
-            var result = await response.Content.ReadAsStringAsync();
-            return Ok(result);
-        }
     }
 }

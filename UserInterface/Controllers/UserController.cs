@@ -31,31 +31,5 @@ namespace UserInterface.Controllers
             var users = JsonConvert.DeserializeObject<List<UserJsonModel>>(result);
             return View(users);
         }
-
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var client = httpClientFactory.CreateClient("AWS");
-                var parameters = new Dictionary<string, string>()
-                {
-                    { "email", model.Email },
-                    { "password", model.Password }
-                };
-                var response = await client.PostAsync("account/login",
-                    new FormUrlEncodedContent(parameters)).ConfigureAwait(false);
-                var result = await response.Content.ReadAsStringAsync();
-                return Ok(result);
-            }
-
-            return View(model);
-        }
     }
 }
