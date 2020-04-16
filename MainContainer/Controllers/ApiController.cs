@@ -37,11 +37,20 @@ namespace MainContainer.Controllers
             return Ok(result);
         }
 
-        [HttpGet("user/{email}")]
+        [HttpGet("user/email/{email}")]
         public async Task<OkObjectResult> GetUserByEmail(string email)
         {
             var client = httpClientFactory.CreateClient("RDS");
-            var response = await client.GetAsync($"user/{email}");
+            var response = await client.GetAsync($"user/email/{email}");
+            var result = await response.Content.ReadAsStringAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("user/{id}")]
+        public async Task<OkObjectResult> GetUserById(string id)
+        {
+            var client = httpClientFactory.CreateClient("RDS");
+            var response = await client.GetAsync($"user/{id}");
             var result = await response.Content.ReadAsStringAsync();
             return Ok(result);
         }
