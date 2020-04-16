@@ -7,6 +7,8 @@ namespace DataAccess.JsonModels
     {
         public List<User> Users { get; set; }
 
+        public UserListJsonModel() { }
+
         public UserListJsonModel(List<User> users)
         {
             Users = users;

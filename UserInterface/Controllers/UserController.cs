@@ -29,27 +29,31 @@ namespace UserInterface.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var client = httpClientFactory.CreateClient("AWS");
-            var query = await client.GetStringAsync("user");
-            var result = JsonConvert.DeserializeObject<string>(query);
-            var users = JsonConvert.DeserializeObject<List<UserJsonModel>>(result);
+            var response = await GetResponse("AWS", "user");
+            var model = JsonConvert.DeserializeObject<UserListJsonModel>(response);
+            var users = mapper.Map<List<User>, List<UserViewModel>>(model.Users);
             return View(users);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var client = httpClientFactory.CreateClient("AWS");
-            var query = await client.GetStringAsync($"user/{id}");
-            var result = JsonConvert.DeserializeObject<string>(query);
-            var entity = JsonConvert.DeserializeObject<UserJsonModel>(result);
+            var response = await GetResponse("AWS", "user", id);
+            var model = JsonConvert.DeserializeObject<UserJsonModel>(response);
+            if (!model.IsSuccess) return NotFound();
+            var user = mapper.Map<UserJsonModel, UserViewModel>(model);
+            return View(user);
+        }
 
-            if (!entity.IsSuccess)
-            {
-                return NotFound();
-            }
+        private async Task<string> GetResponse(string httpClient, string action, params string[] param)
+        {
+            if(param.Length > 0)
+                foreach(var par in param)
+                    action += "/" + par;
 
-            return View(entity);
+            var client = httpClientFactory.CreateClient(httpClient);
+            var query = await client.GetStringAsync(action);
+            return JsonConvert.DeserializeObject<string>(query);
         }
     }
 }

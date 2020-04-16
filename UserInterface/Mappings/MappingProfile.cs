@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.JsonModels;
+using DataAccess.Models;
 using UserInterface.Models;
 namespace UserInterface.Mappings
 {
@@ -8,7 +9,10 @@ namespace UserInterface.Mappings
         public MappingProfile()
         {
             CreateMap<UserJsonModel, UserViewModel>(MemberList.Source);
-            CreateMap<UserJsonModel, UserViewModel>(MemberList.None);
+            CreateMap<UserViewModel, UserJsonModel>(MemberList.None);
+
+            CreateMap<User, UserViewModel>(MemberList.Source);
+            CreateMap<UserViewModel, User>(MemberList.None);
         }
     }
 }
