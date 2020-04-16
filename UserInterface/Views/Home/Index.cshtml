@@ -2,7 +2,49 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .card{
+        min-height:300px;
+        box-shadow: rgba(0,0,0,.1) 10px 10px inset;
+    }
+</style>
+
+<div class="text-center pt-4">
+    <h1 class="display-4">Cloud Computing</h1>
+    <p>Learn about <a href="https://aws.amazon.com/ru/">AWS Services</a>.</p>
+</div>
+
+<div class="container pt-3">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">RDS Container</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">AWS Relational Database Service</h6>
+                    <p class="card-text">Облачный сервис, который обеспечивает пользователей реляционными базами данных.</p>
+                    <a href="https://ru.wikipedia.org/wiki/Amazon_Relational_Database_Service" class="btn btn-primary">More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size:25px;font-weight:bold">Main Container</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">AWS Elastic Beanstalk</h6>
+                    <p class="card-text">Сервис оркестрации, предлагаемый Amazon Web Services для развертывания приложений.</p>
+                    <a href="https://en.wikipedia.org/wiki/AWS_Elastic_Beanstalk" class="btn btn-primary">More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body pt-4">
+                    <h5 class="card-title">MDB Container</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Amazon MongoDB Service</h6>
+                    <p class="card-text">Веб-сервис от Amazon, который предоставляет вычислительные мощности в облаке.</p>
+                    <a href="https://ru.wikipedia.org/wiki/Amazon_EC2" class="btn btn-primary">More</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
