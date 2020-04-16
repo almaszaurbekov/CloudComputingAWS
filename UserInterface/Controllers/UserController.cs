@@ -31,5 +31,15 @@ namespace UserInterface.Controllers
             var users = JsonConvert.DeserializeObject<List<UserJsonModel>>(result);
             return View(users);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var client = httpClientFactory.CreateClient("AWS");
+            var query = await client.GetStringAsync($"user/{id}");
+            var result = JsonConvert.DeserializeObject<string>(query);
+            var user = JsonConvert.DeserializeObject<UserJsonModel>(result);
+            return View(user);
+        }
     }
 }
