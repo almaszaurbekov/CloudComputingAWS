@@ -38,8 +38,14 @@ namespace UserInterface.Controllers
             var client = httpClientFactory.CreateClient("AWS");
             var query = await client.GetStringAsync($"user/{id}");
             var result = JsonConvert.DeserializeObject<string>(query);
-            var user = JsonConvert.DeserializeObject<UserJsonModel>(result);
-            return View(user);
+            var entity = JsonConvert.DeserializeObject<UserJsonModel>(result);
+
+            if (!entity.IsSuccess)
+            {
+                return NotFound();
+            }
+
+            return View(entity);
         }
     }
 }
