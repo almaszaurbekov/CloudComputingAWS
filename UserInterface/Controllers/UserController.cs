@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Common;
@@ -19,8 +20,7 @@ namespace UserInterface.Controllers
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IMapper mapper;
 
-        public UserController(IHttpClientFactory httpClientFactory,
-            IMapper mapper)
+        public UserController(IHttpClientFactory httpClientFactory, IMapper mapper)
         {
             this.httpClientFactory = httpClientFactory;
             this.mapper = mapper;
@@ -38,22 +38,58 @@ namespace UserInterface.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var response = await GetResponse("AWS", "user", id);
-            var model = JsonConvert.DeserializeObject<UserJsonModel>(response);
-            if (!model.IsSuccess) return NotFound();
-            var user = mapper.Map<UserJsonModel, UserViewModel>(model);
+            var user = await GetUserById(id);
+            if(user == null) return NotFound();
             return View(user);
         }
 
-        private async Task<string> GetResponse(string httpClient, string action, params string[] param)
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await GetUserById(id);
+            if (user == null) return NotFound();
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = mapper.Map<UserViewModel, UserJsonModel>(model);
+                var response = await PostResponse("AWS", "user/edit", user);
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
+        private async Task<UserViewModel> GetUserById(string id)
+        {
+            var response = await GetResponse("AWS", "user", id);
+            var model = JsonConvert.DeserializeObject<UserJsonModel>(response);
+            if (!model.IsSuccess) return null;
+            return mapper.Map<UserJsonModel, UserViewModel>(model);
+        }
+
+        private async Task<string> GetResponse(string httpClient, string action, 
+            params string[] param)
         {
             if(param.Length > 0)
                 foreach(var par in param)
                     action += "/" + par;
 
             var client = httpClientFactory.CreateClient(httpClient);
-            var query = await client.GetStringAsync(action);
-            return JsonConvert.DeserializeObject<string>(query);
+            var response = await client.GetStringAsync(action);
+            return JsonConvert.DeserializeObject<string>(response);
+        }
+
+        private async Task<string> PostResponse(string httpClient, string action, object model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = httpClientFactory.CreateClient(httpClient);
+            var response = await client.PostAsync(action, data);
+            return response.Content.ReadAsStringAsync().Result;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using DataAccess.JsonModels;
@@ -62,6 +63,22 @@ namespace ContainerRDS.Controllers
                 return Ok(new UserJsonModel() { Error = "There is no user with this email", IsSuccess = false });
             }
             return Ok(new UserJsonModel("Email field is empty", false));
+        }
+
+        [HttpPost("edit")]
+        public async Task<OkObjectResult> EditUser(UserJsonModel model)
+        {
+            try
+            {
+                var user = await service.Find(s => s.Id == model.Id);
+                user = mapper.Map(model, user);
+                await service.Update(user);
+                return Ok(mapper.Map<User, UserJsonModel>(user));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new UserJsonModel(ex.ToString(), false));
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ namespace ContainerRDS.Mappings
             CreateMap<User, UserJsonModel>(MemberList.Source)
                 .ForMember(d => d.IsSuccess, opt => opt.MapFrom(src => src.EmailConfirmed));
             CreateMap<UserJsonModel, User>(MemberList.None);
+            CreateMap<User, User>(MemberList.Source);
         }
     }
 }

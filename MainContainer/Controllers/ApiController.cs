@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Common;
+using DataAccess.JsonModels;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+
 namespace MainContainer.Controllers
 {
     [ApiController]
@@ -31,37 +36,52 @@ namespace MainContainer.Controllers
         [HttpGet("user")]
         public async Task<OkObjectResult> GetUserList()
         {
-            var client = httpClientFactory.CreateClient("RDS");
-            var response = await client.GetAsync("user");
-            var result = await response.Content.ReadAsStringAsync();
-            return Ok(result);
+            var response = await GetResponse("RDS", "user");
+            return Ok(response);
         }
 
         [HttpGet("user/email/{email}")]
         public async Task<OkObjectResult> GetUserByEmail(string email)
         {
-            var client = httpClientFactory.CreateClient("RDS");
-            var response = await client.GetAsync($"user/email/{email}");
-            var result = await response.Content.ReadAsStringAsync();
-            return Ok(result);
+            var response = await GetResponse("RDS", $"user/email/{email}");
+            return Ok(response);
         }
 
         [HttpGet("user/{id}")]
         public async Task<OkObjectResult> GetUserById(string id)
         {
-            var client = httpClientFactory.CreateClient("RDS");
-            var response = await client.GetAsync($"user/{id}");
-            var result = await response.Content.ReadAsStringAsync();
-            return Ok(result);
+            var response = await GetResponse("RDS", $"user/{id}");
+            return Ok(response);
+        }
+
+        [HttpPost("user/edit")]
+        public async Task<OkObjectResult> EditUser(UserJsonModel user)
+        {
+            var response = await PostResponse("RDS", "user/edit", user);
+            return Ok(response);
         }
 
         [HttpGet("product")]
         public async Task<OkObjectResult> GetProductList()
         {
-            var client = httpClientFactory.CreateClient("RDS");
-            var response = await client.GetAsync("product");
-            var result = await response.Content.ReadAsStringAsync();
-            return Ok(result);
+            var response = await GetResponse("RDS", "product");
+            return Ok(response);
+        }
+
+        private async Task<string> GetResponse(string httpClient, string action)
+        {
+            var client = httpClientFactory.CreateClient(httpClient);
+            var response = await client.GetAsync(action);
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        private async Task<string> PostResponse(string httpClient, string action, object model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = httpClientFactory.CreateClient(httpClient);
+            var response = await client.PostAsync(action, data);
+            return response.Content.ReadAsStringAsync().Result;
         }
     }
 }
