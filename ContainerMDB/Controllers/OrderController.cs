@@ -1,25 +1,35 @@
 ﻿using System.Collections.Generic;
+using DataAccess.Context;
+using DataAccess.JsonModels;
 using DataAccess.Models;
 using DataAccess.Static;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
+
 namespace ContainerMDB.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly ILogger<OrderController> _logger;
+        private MdbContext mongo { get; set; }
 
-        public OrderController(ILogger<OrderController> logger)
+        public OrderController()
         {
-            _logger = logger;
+            mongo = new MdbContext();
         }
 
         [HttpGet]
-        public List<Order> Get()
+        public OkObjectResult Get()
         {
-            return new List<Order>();
+            var orders = mongo.Orders.Find(_ => true).ToList();
+            if (orders.Count > 0)
+            {
+                var model = new OrderListJsonModel(orders);
+                return Ok(model);
+            }
+            return Ok(new OrderListJsonModel(false, "Order list is empty"));
         }
     }
 }
