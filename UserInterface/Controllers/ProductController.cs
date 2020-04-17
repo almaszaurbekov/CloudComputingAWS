@@ -79,7 +79,7 @@ namespace UserInterface.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await PutResponse("AWS", "product", id, product);
+                var response = await PutResponse("AWS", $"product/{id}", product);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -132,10 +132,9 @@ namespace UserInterface.Controllers
             return response.Content.ReadAsStringAsync().Result;
         }
 
-        private async Task<string> PutResponse(string httpClient, string action, object id, object model)
+        private async Task<string> PutResponse(string httpClient, string action, object model)
         {
-            Dictionary<string, object> set = new Dictionary<string, object>() { { "id", id }, { "model", model } };
-            var json = JsonConvert.SerializeObject(set);
+            var json = JsonConvert.SerializeObject(model);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var client = httpClientFactory.CreateClient(httpClient);
             var response = await client.PutAsync(action, data);
