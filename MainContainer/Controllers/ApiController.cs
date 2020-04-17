@@ -68,8 +68,41 @@ namespace MainContainer.Controllers
             return Ok(response);
         }
 
-        private async Task<string> GetResponse(string httpClient, string action)
+        [HttpGet("product/{id}")]
+        public async Task<OkObjectResult> GetProductById(int id)
         {
+            var response = await GetResponse("RDS", "product", id);
+            return Ok(response);
+        }
+
+        [HttpPut("product/{id}")]
+        public async Task<OkObjectResult> EditProduct(int id, Product product)
+        {
+            var response = await PutResponse("RDS", "product", id, product);
+            return Ok(response);
+        }
+
+        [HttpPost("product")]
+        public async Task<OkObjectResult> CreateProduct(Product product)
+        {
+            var response = await PostResponse("RDS", "product", product);
+            return Ok(response);
+        }
+
+        [HttpDelete("product/{id}")]
+        public async Task<OkObjectResult> DeleteProduct(int id)
+        {
+            var response = await DeleteResponse("RDS", $"product/{id}");
+            return Ok(response);
+        }
+
+        private async Task<string> GetResponse(string httpClient, string action,
+            params object[] param)
+        {
+            if (param.Length > 0)
+                foreach (var par in param)
+                    action += "/" + par;
+
             var client = httpClientFactory.CreateClient(httpClient);
             var response = await client.GetAsync(action);
             return await response.Content.ReadAsStringAsync();
@@ -81,6 +114,23 @@ namespace MainContainer.Controllers
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var client = httpClientFactory.CreateClient(httpClient);
             var response = await client.PostAsync(action, data);
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+        private async Task<string> PutResponse(string httpClient, string action, object id, object model)
+        {
+            Dictionary<string, object> set = new Dictionary<string, object>() { { "id", id }, { "model", model } };
+            var json = JsonConvert.SerializeObject(set);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var client = httpClientFactory.CreateClient(httpClient);
+            var response = await client.PutAsync(action, data);
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+        private async Task<string> DeleteResponse(string httpClient, string action)
+        {
+            var client = httpClientFactory.CreateClient(httpClient);
+            var response = await client.DeleteAsync(action);
             return response.Content.ReadAsStringAsync().Result;
         }
     }

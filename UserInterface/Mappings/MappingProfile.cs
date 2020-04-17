@@ -13,6 +13,12 @@ namespace UserInterface.Mappings
 
             CreateMap<User, UserViewModel>(MemberList.Source);
             CreateMap<UserViewModel, User>(MemberList.None);
+
+            CreateMap<Product, ProductViewModel>(MemberList.Source);
+            CreateMap<ProductViewModel, Product>(MemberList.None);
+
+            CreateMap<ProductJsonModel, ProductViewModel>(MemberList.Source);
+            CreateMap<ProductViewModel, ProductJsonModel>(MemberList.None);
         }
     }
 }

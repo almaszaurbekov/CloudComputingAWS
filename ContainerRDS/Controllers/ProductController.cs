@@ -7,104 +7,94 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Context;
 using DataAccess.Models;
-
+using Microsoft.Extensions.Logging;
+using DataAccess.Services;
+using AutoMapper;
+using DataAccess.JsonModels;
+using DataAccess.Static;
 namespace ContainerRDS.Controllers
 {
     [Route("[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly RdsContext _context;
+        private readonly ILogger<ProductController> logger;
+        private readonly IProductService service;
+        private readonly IMapper mapper;
 
-        public ProductController(RdsContext context)
+        public ProductController(ILogger<ProductController> logger,
+            IProductService service, IMapper mapper)
         {
-            _context = context;
+            this.logger = logger;
+            this.service = service;
+            this.mapper = mapper;
         }
 
-        // GET: api/Products
+        // GET: api/Product
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<OkObjectResult> GetProducts()
         {
-            return await _context.Products.ToListAsync();
-        }
-
-        // GET: api/Products/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
+            var products = await service.GetAll();
+            if (products.Count > 0)
             {
-                return NotFound();
+                var model = new ProductListJsonModel(products);
+                return Ok(model);
             }
-
-            return product;
+            return Ok(new ProductListJsonModel(false, "Product list is empty"));
         }
 
-        // PUT: api/Products/5
+        // GET: api/Product/5
+        [HttpGet("{id}")]
+        public async Task<OkObjectResult> GetProductById(int id)
+        {
+            if (SDHelper.IsValueNotNull(id.ToString()))
+            {
+                var user = await service.Find(s => s.Id == id);
+                if (user != null)
+                    return Ok(mapper.Map<Product, ProductJsonModel>(user));
+                return Ok(new ProductJsonModel() { Error = "There is no product with this Id", IsSuccess = false });
+            }
+            return Ok(new ProductJsonModel("Id field is empty", false));
+        }
+
+        // PUT: api/Product/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        public async Task<OkObjectResult> PutProduct(int id, Product product)
         {
             if (id != product.Id)
             {
-                return BadRequest();
+                return Ok(new ProductJsonModel("Bad request", false));
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            await service.Update(product);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(product);
         }
 
-        // POST: api/Products
+        // POST: api/Product
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<OkObjectResult> PostProduct(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            await service.Create(product);
+            return Ok(product);
         }
 
-        // DELETE: api/Products/5
+        // DELETE: api/Product/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> DeleteProduct(int id)
+        public async Task<OkObjectResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await service.Find(s => s.Id == id);
             if (product == null)
             {
-                return NotFound();
+                Ok(new ProductJsonModel("Not found", false));
             }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return product;
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
+            await service.Delete(product);
+            return Ok(product);
         }
     }
 }
