@@ -1,13 +1,14 @@
 ﻿using DataAccess.Models.Base;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
 namespace DataAccess.Models
 {
-    public class Order
+    public class Order : MdbModel
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public double ProductPrice { get; set; }
+        public int ProductCount { get; set; }
+        public double TotalPrice { get { return ProductPrice * ProductCount; }}
     }
 }
