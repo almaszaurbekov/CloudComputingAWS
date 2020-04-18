@@ -2,6 +2,7 @@
 using DataAccess.Context;
 using DataAccess.JsonModels;
 using DataAccess.Models;
+using DataAccess.Services;
 using DataAccess.Static;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,17 +14,18 @@ namespace ContainerMDB.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private MdbContext mongo { get; set; }
+        private readonly OrderService service;
 
-        public OrderController()
+        public OrderController(OrderService service)
         {
-            mongo = new MdbContext();
+            this.service = service;
         }
+
 
         [HttpGet]
         public OkObjectResult Get()
         {
-            var orders = mongo.Orders.Find(_ => true).ToList();
+            var orders = service.Get();
             if (orders.Count > 0)
             {
                 var model = new OrderListJsonModel(orders);

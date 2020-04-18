@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DataAccess.Models;
+using DataAccess.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 namespace ContainerMDB.Controllers
@@ -8,17 +9,11 @@ namespace ContainerMDB.Controllers
     [Route("[controller]")]
     public class PostController : ControllerBase
     {
-        private readonly ILogger<PostController> _logger;
+        private readonly PostService service;
 
-        public PostController(ILogger<PostController> logger)
+        public PostController(PostService service)
         {
-            _logger = logger;
-        }
-
-        [HttpGet]
-        public List<Post> Get()
-        {
-            return new List<Post>();
+            this.service = service;
         }
     }
 }
