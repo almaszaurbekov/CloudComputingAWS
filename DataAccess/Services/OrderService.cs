@@ -1,4 +1,5 @@
 ﻿using Common;
+using DataAccess.JsonModels;
 using DataAccess.Models;
 using MongoDB.Driver;
 using System;
@@ -18,7 +19,8 @@ namespace DataAccess.Services
             orders = database.GetCollection<Order>("Orders");
         }
 
-        public List<Order> Get() =>
-            orders.Find(order => true).ToList();
+        public List<Order> Get() => orders.Find(order => true).ToList();
+
+        public void Insert(Order order) => orders.InsertOne(order);
     }
 }

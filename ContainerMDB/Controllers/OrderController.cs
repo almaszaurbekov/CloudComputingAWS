@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using DataAccess.Context;
 using DataAccess.JsonModels;
 using DataAccess.Models;
@@ -15,10 +17,12 @@ namespace ContainerMDB.Controllers
     public class OrderController : ControllerBase
     {
         private readonly OrderService service;
+        private readonly IMapper mapper;
 
-        public OrderController(OrderService service)
+        public OrderController(OrderService service, IMapper mapper)
         {
             this.service = service;
+            this.mapper = mapper;
         }
 
 
@@ -32,6 +36,21 @@ namespace ContainerMDB.Controllers
                 return Ok(model);
             }
             return Ok(new OrderListJsonModel(false, "Order list is empty"));
+        }
+
+        [HttpPost]
+        public OkObjectResult Insert(OrderJsonModel model)
+        {
+            try
+            {
+                var order = mapper.Map<OrderJsonModel, Order>(model);
+                service.Insert(order);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new OrderJsonModel(false, ex.Message));
+            }
         }
     }
 }
