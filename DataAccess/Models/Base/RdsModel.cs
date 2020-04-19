@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace DataAccess.Models.Base
 {
-    public abstract class Model
+    public abstract class RdsModel
     {
         [Key]
         public int Id { get; set; }

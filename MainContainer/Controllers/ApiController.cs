@@ -33,6 +33,8 @@ namespace MainContainer.Controllers
             return Ok(new { response = 200 });
         }
 
+        #region USER
+
         [HttpGet("user")]
         public async Task<OkObjectResult> GetUserList()
         {
@@ -60,6 +62,10 @@ namespace MainContainer.Controllers
             var response = await PostResponse("RDS", "user/edit", user);
             return Ok(response);
         }
+
+        #endregion
+
+        #region PRODUCT
 
         [HttpGet("product")]
         public async Task<OkObjectResult> GetProductList()
@@ -95,6 +101,88 @@ namespace MainContainer.Controllers
             var response = await DeleteResponse("RDS", $"product/{id}");
             return Ok(response);
         }
+
+        #endregion
+
+        #region ORDER
+
+        [HttpGet("order")]
+        public async Task<OkObjectResult> GetOrderList()
+        {
+            var response = await GetResponse("MDB", "order");
+            return Ok(response);
+        }
+
+        [HttpGet("order/{id}")]
+        public async Task<OkObjectResult> GetOrderById(string id)
+        {
+            var response = await GetResponse("MDB", "order", id);
+            return Ok(response);
+        }
+
+        [HttpPut("order/{id}")]
+        public async Task<OkObjectResult> EditOrder(string id, OrderJsonModel order)
+        {
+            var response = await PutResponse("MDB", $"order/{id}", order);
+            return Ok(response);
+        }
+
+        [HttpPost("order")]
+        public async Task<OkObjectResult> CreateOrder(OrderJsonModel order)
+        {
+            var response = await PostResponse("MDB", "order", order);
+            return Ok(response);
+        }
+
+        [HttpDelete("order/{id}")]
+        public async Task<OkObjectResult> DeleteOrder(string id)
+        {
+            var response = await DeleteResponse("MDB", $"order/{id}");
+            return Ok(response);
+        }
+
+        #endregion
+
+        #region POST
+
+        [HttpGet("post")]
+        public async Task<OkObjectResult> GetPostList()
+        {
+            var response = await GetResponse("MDB", "post");
+            return Ok(response);
+        }
+
+        [HttpGet("post/{id}")]
+        public async Task<OkObjectResult> GetPostById(string id)
+        {
+            var response = await GetResponse("MDB", "post", id);
+            return Ok(response);
+        }
+
+        [HttpPut("post/{id}")]
+        public async Task<OkObjectResult> EditPost(string id, PostJsonModel post)
+        {
+            var response = await PutResponse("MDB", $"post/{id}", post);
+            return Ok(response);
+        }
+
+        [HttpPost("post")]
+        public async Task<OkObjectResult> CreatePost(PostJsonModel post)
+        {
+            var response = await PostResponse("MDB", "post", post);
+            return Ok(response);
+        }
+
+        [HttpDelete("post/{id}")]
+        public async Task<OkObjectResult> DeletePost(string id)
+        {
+            var response = await DeleteResponse("MDB", $"post/{id}");
+            return Ok(response);
+        }
+
+        #endregion
+
+        #region RESPONSE METHODS
 
         private async Task<string> GetResponse(string httpClient, string action,
             params object[] param)
@@ -132,5 +220,7 @@ namespace MainContainer.Controllers
             var response = await client.DeleteAsync(action);
             return response.Content.ReadAsStringAsync().Result;
         }
+
+        #endregion
     }
 }

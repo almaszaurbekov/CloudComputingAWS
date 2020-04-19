@@ -1,12 +1,13 @@
-﻿using DataAccess.Models.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace DataAccess.Models
+namespace UserInterface.Models
 {
-    public class Post : MdbModel
+    public class PostViewModel
     {
+        public string Id { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string Title { get; set; }
