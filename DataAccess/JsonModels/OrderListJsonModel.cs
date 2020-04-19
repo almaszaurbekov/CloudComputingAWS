@@ -6,7 +6,7 @@ namespace DataAccess.JsonModels
 {
     public class OrderListJsonModel : BaseJsonModel
     {
-        List<Order> Orders { get; set; }
+        public List<Order> Orders { get; set; }
 
         public OrderListJsonModel() { }
 

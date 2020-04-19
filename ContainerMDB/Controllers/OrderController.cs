@@ -38,8 +38,20 @@ namespace ContainerMDB.Controllers
             return Ok(new OrderListJsonModel(false, "Order list is empty"));
         }
 
+        [HttpGet("{id}")]
+        public OkObjectResult GetOrderById(string id)
+        {
+            var order = service.GetOrderById(id);
+            if (order != null)
+            {
+                var model = mapper.Map<Order, OrderJsonModel>(order);
+                return Ok(model);
+            }
+            return Ok(new OrderJsonModel(false, "No order with this id"));
+        }
+
         [HttpPost]
-        public OkObjectResult Insert(OrderJsonModel model)
+        public OkObjectResult AddOrder(OrderJsonModel model)
         {
             try
             {
@@ -51,6 +63,48 @@ namespace ContainerMDB.Controllers
             {
                 return Ok(new OrderJsonModel(false, ex.Message));
             }
+        }
+
+        [HttpPut("{id}")]
+        public OkObjectResult UpdateOrder(string id, OrderJsonModel model)
+        {
+            try
+            {
+                if (id != model.Id)
+                {
+                    return Ok(new OrderJsonModel(false, "Bad request"));
+                }
+
+                var order = mapper.Map<OrderJsonModel, Order>(model);
+                var result = service.Update(order);
+                if (result)
+                {
+                    return Ok(model);
+                }
+                return Ok(new OrderJsonModel(false, "Something went wrong"));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new OrderJsonModel(false, ex.Message));
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public OkObjectResult DeleteOrder(string id)
+        {
+            var order = service.GetOrderById(id);
+            if (order == null)
+            {
+                Ok(new OrderJsonModel(false, "Not found"));
+            }
+
+            var result = service.Remove(id);
+            if (result)
+            {
+                return Ok(mapper.Map<Order, OrderJsonModel>(order));
+            }
+
+            return Ok(new OrderJsonModel(false, "Something went wrong"));
         }
     }
 }
