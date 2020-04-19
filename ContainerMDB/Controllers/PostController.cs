@@ -31,7 +31,7 @@ namespace ContainerMDB.Controllers
                 var model = new PostListJsonModel(posts);
                 return Ok(model);
             }
-            return Ok(new OrderListJsonModel(false, "Order list is empty"));
+            return Ok(new PostListJsonModel(false, "Order list is empty"));
         }
 
         [HttpGet("{id}")]
