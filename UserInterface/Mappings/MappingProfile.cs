@@ -19,6 +19,18 @@ namespace UserInterface.Mappings
 
             CreateMap<ProductJsonModel, ProductViewModel>(MemberList.Source);
             CreateMap<ProductViewModel, ProductJsonModel>(MemberList.None);
+
+            CreateMap<Post, PostViewModel>(MemberList.Source);
+            CreateMap<PostViewModel, Post>(MemberList.None);
+
+            CreateMap<PostJsonModel, PostViewModel>(MemberList.Source);
+            CreateMap<PostViewModel, PostJsonModel>(MemberList.None);
+
+            CreateMap<Order, OrderViewModel>(MemberList.Source);
+            CreateMap<OrderViewModel, Order>(MemberList.None);
+
+            CreateMap<OrderJsonModel, OrderViewModel>(MemberList.Source);
+            CreateMap<OrderViewModel, OrderJsonModel>(MemberList.None);
         }
     }
 }

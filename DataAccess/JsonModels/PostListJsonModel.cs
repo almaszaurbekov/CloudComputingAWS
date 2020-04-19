@@ -10,6 +10,8 @@ namespace DataAccess.JsonModels
     {
         public List<Post> Posts { get; set; }
 
+        public PostListJsonModel() { }
+
         public PostListJsonModel(List<Post> posts)
         {
             Posts = posts;
