@@ -10,6 +10,9 @@ namespace ContainerMDB.Mappings
         {
             CreateMap<Order, OrderJsonModel>();
             CreateMap<OrderJsonModel, Order>();
+
+            CreateMap<Post, PostJsonModel>();
+            CreateMap<PostJsonModel, Post>();
         }
     }
 }

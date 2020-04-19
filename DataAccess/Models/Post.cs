@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataAccess.Models
 {
-    public class Post : RdsModel
+    public class Post : MdbModel
     {
         public string UserId { get; set; }
         public string UserName { get; set; }
